@@ -587,6 +587,7 @@
 				35C1A74B1C5E1A14007C9F81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		35C1A74C1C5E1A14007C9F81 /* Build configuration list for PBXNativeTarget "AFNToolTests" */ = {
 			isa = XCConfigurationList;
@@ -595,6 +596,7 @@
 				35C1A74E1C5E1A14007C9F81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		35C1A74F1C5E1A14007C9F81 /* Build configuration list for PBXNativeTarget "AFNToolUITests" */ = {
 			isa = XCConfigurationList;
@@ -603,6 +605,7 @@
 				35C1A7511C5E1A14007C9F81 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

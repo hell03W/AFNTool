@@ -11,7 +11,8 @@
 #import <stdarg.h>
 
 
-static NSString *baseUrl = @"http://121.196.233.59:8080/";
+
+static NSString *baseUrl = @""; // 设置baseUrl
 static AFNToolRequestStyle requestStyle;
 static NSMutableArray *operations;
 
@@ -66,12 +67,12 @@ static NSMutableArray *operations;
                      success:(void (^)(NSDictionary *success))success
                      failure:(void (^)(NSError *error))failure
 {
-    //判断网络是否可用
-//    if(![Reachability currentReachabilityStatus]) //网络不可用时候
-//    {
-//        [MBProgressHUD showError: toView:nil];
-//        return;
-//    }
+//    判断网络是否可用
+    if(![Reachability currentReachabilityStatus]) //网络不可用时候
+    {
+#pragma mark - ios8.4 检测不到网络
+        return;
+    }
     
     if (urlString) {
         urlString = [baseUrl stringByAppendingString:urlString];
@@ -191,25 +192,24 @@ static NSMutableArray *operations;
 //1, 添加n个任务
 + (void)addRequestWithHTTPMethod:(NSString *)method
                        UrlString:(NSString *)urlString
-                     params:(NSDictionary *)paramsDict
+                     params:(id)paramsDict
                     success:(void (^)(NSDictionary *success))success
                     failure:(void (^)(NSError *error))failure
 {
-    AFNTool *afnTool = [AFNTool shareAFNTool];
-    
-    urlString = [baseUrl stringByAppendingString:urlString];
-    AFHTTPRequestOperation *op = [afnTool HTTPRequestOperationWithHTTPMethod:method URLString:urlString parameters:paramsDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        success(responseObject);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        failure(error);
-    }];
-
-    [operations addObject:op];
+    [AFNTool shareAFNTool];
+    RequestOperationModel *model = [RequestOperationModel requestModel];
+    model.method = method;
+    model.urlString = urlString;
+    model.paramsDict = paramsDict;
+    model.success = success;
+    model.error = failure;
+    [operations addObject:model];
 }
 
 //2, 开始执行, 任务按照添加顺序依次执行
-+ (void)excuteOperationsInOrder
++ (void)executeOperationsInOrder
 {
+    [self createOperations];
     AFNTool *afnTool = [AFNTool shareAFNTool];
     //给操作设置依赖关系
     for (int i = 0; i < operations.count - 1; i++) {
@@ -226,8 +226,9 @@ static NSMutableArray *operations;
 }
 
 //3, n个任务, 分块执行, 类似GCD的group
-+ (void)excuteOperationsWithDependency:(NSString *)groupNum, ... NS_REQUIRES_NIL_TERMINATION
++ (void)executeOperationsWithDependency:(NSString *)groupNum, ... NS_REQUIRES_NIL_TERMINATION
 {
+    [self createOperations];
     AFNTool *afnTool = [AFNTool shareAFNTool];
     
     va_list varList;
@@ -292,14 +293,78 @@ static NSMutableArray *operations;
 }
 
 //4, 同步执行任务
-+ (void)executeSync
++ (id)executeSync
 {
+    NSMutableDictionary *responseDict = [NSMutableDictionary dictionary];
     
+    AFNTool *afnTool = [AFNTool shareAFNTool];
+    for (int i = 0; i < operations.count; i++)//RequestOperationModel *model in operations)
+    {
+        RequestOperationModel *model = [operations objectAtIndex:i];
+        
+        //1, 根据网络请求参数创建 自行创建 NSMutableURLResuest 对象
+        NSString *urlString = [baseUrl stringByAppendingString:model.urlString];
+        NSError *serializationError = nil;
+        NSMutableURLRequest *request = [afnTool.requestSerializer requestWithMethod:model.method URLString:[[NSURL URLWithString:urlString] absoluteString] parameters:model.paramsDict error:&serializationError];
+        
+        //2, 根据网络请求参数创建 自行创建 AFHTTPRequestOperation 对象
+        AFHTTPRequestOperation *requestOperation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+        requestOperation.responseSerializer = afnTool.responseSerializer;
+        
+        //3, 同步执行 AFHTTPRequestOperation
+        [requestOperation start];
+        [requestOperation waitUntilFinished];
+        
+        //4, 得到任务执行结果之后, 执行block代码块, 执行调用函数时候封装的操作
+        if (requestOperation.responseObject) {
+            model.success(requestOperation.responseObject);
+            [responseDict setObject:requestOperation.responseObject forKey:[NSString stringWithFormat:@"%d", i]];
+        }
+        if (serializationError) {
+            model.error(serializationError);
+        }
+    }
+    
+    [operations removeAllObjects];
+    
+    return responseDict;
 }
 
+// 将存在model中的请求数据 放到 AFHTTPRequestOperation 对象中去
++ (void)createOperations
+{
+    AFNTool *afnTool = [AFNTool shareAFNTool];
+    NSArray *opModels = [NSArray arrayWithArray:operations];
+    [operations removeAllObjects];
+    
+    for (RequestOperationModel *model in opModels)
+    {
+        NSString *urlString = [baseUrl stringByAppendingString:model.urlString];
+        AFHTTPRequestOperation *op = [afnTool HTTPRequestOperationWithHTTPMethod:model.method URLString:urlString parameters:model.paramsDict success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            model.success(responseObject);
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            model.error(error);
+        }];
+        [operations addObject:op];
+    }
+}
 
 
 @end
 
+
+
+
+
+
+
+@implementation RequestOperationModel
+
++ (id)requestModel
+{
+    return [[self alloc] init];
+}
+
+@end
 
 
