@@ -34,11 +34,10 @@ static NSMutableArray *operations;
         afnTool.requestSerializer = [AFJSONRequestSerializer serializer];
         afnTool.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/json",@"text/javascript",@"text/html",@"text/plain",nil];
         afnTool.requestSerializer.timeoutInterval = 10;  // 请求超时时间  10s
+        requestStyle = AFNToolRequestStylePOST; // 设置请求方式是post
         
         operations = [NSMutableArray array]; //存放操作的数组
     });
-    
-    requestStyle = AFNToolRequestStylePOST; // 设置请求方式是post
     
     return afnTool;
 }
@@ -46,6 +45,7 @@ static NSMutableArray *operations;
 // 设置请求方式
 + (void)requestStyle:(AFNToolRequestStyle)requestStyleParam
 {
+    [AFNTool shareAFNTool];
     requestStyle = requestStyleParam;
 }
 

@@ -13,7 +13,7 @@
 3. 添加`n`个任务, `分组执行`
 4. `同步`执行任务
 
-###AFNTool解读
+### AFNTool解读
 AFNTool工具类继承自`AFHTTPRequestOperationManager`, 因此AFHTTPRequestOperationManager中的方法通过AFNTool的对象也是可以调用了, 如果你必须使用AFHTTPRequestOperationManager才能解决的问题, 也可以直接使用AFNTool的对象调用AFHTTPRequestOperationManager的方法.
 
 AFNTool有几个基本的请求设置方法.如下所示:
@@ -34,7 +34,7 @@ AFNTool有几个基本的请求设置方法.如下所示:
 
 AFNTool中包含一个 `static NSString *baseUrl = @""; // 设置baseUrl` , 可以在这里设置一个baseURL, 如果其他如要更换ip, 直接在这里更换一次即可.
 
-###AFNTool使用示例
+### AFNTool使用示例
 **1, 基本设置和使用方法**
 
 ```Objective-C
@@ -115,3 +115,14 @@ AFNTool中包含一个 `static NSString *baseUrl = @""; // 设置baseUrl` , 可�
 }
 ```
 
+
+### 补充
+iOS9以后使用http请求需要在plist中增加允许
+
+```
+<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+</dict>
+```
