@@ -7,7 +7,6 @@
 //
 
 #import "AFNTool.h"
-#import "Reachability.h"
 #import <stdarg.h>
 
 
@@ -67,13 +66,6 @@ static NSMutableArray *operations;
                      success:(void (^)(NSDictionary *success))success
                      failure:(void (^)(NSError *error))failure
 {
-//    判断网络是否可用
-    if(![Reachability currentReachabilityStatus]) //网络不可用时候
-    {
-#pragma mark - ios8.4 检测不到网络
-        return;
-    }
-    
     if (urlString) {
         urlString = [baseUrl stringByAppendingString:urlString];
     }

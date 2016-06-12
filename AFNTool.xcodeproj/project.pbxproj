@@ -26,7 +26,6 @@
 		35C1A76D1C5E1A68007C9F81 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C1A7631C5E1A68007C9F81 /* AFURLResponseSerialization.m */; };
 		35C1A76E1C5E1A68007C9F81 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C1A7651C5E1A68007C9F81 /* AFURLSessionManager.m */; };
 		35C1A7821C5E1B82007C9F81 /* AFNTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C1A77F1C5E1B82007C9F81 /* AFNTool.m */; };
-		35C1A7831C5E1B82007C9F81 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C1A7811C5E1B82007C9F81 /* Reachability.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,8 +84,6 @@
 		35C1A7651C5E1A68007C9F81 /* AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFURLSessionManager.m; sourceTree = "<group>"; };
 		35C1A77E1C5E1B82007C9F81 /* AFNTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNTool.h; sourceTree = "<group>"; };
 		35C1A77F1C5E1B82007C9F81 /* AFNTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFNTool.m; sourceTree = "<group>"; };
-		35C1A7801C5E1B82007C9F81 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		35C1A7811C5E1B82007C9F81 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -210,8 +207,6 @@
 			children = (
 				35C1A77E1C5E1B82007C9F81 /* AFNTool.h */,
 				35C1A77F1C5E1B82007C9F81 /* AFNTool.m */,
-				35C1A7801C5E1B82007C9F81 /* Reachability.h */,
-				35C1A7811C5E1B82007C9F81 /* Reachability.m */,
 			);
 			path = AFNTools;
 			sourceTree = SOURCE_ROOT;
@@ -361,7 +356,6 @@
 				35C1A76D1C5E1A68007C9F81 /* AFURLResponseSerialization.m in Sources */,
 				35C1A76E1C5E1A68007C9F81 /* AFURLSessionManager.m in Sources */,
 				35C1A72A1C5E1A14007C9F81 /* AFNTool.xcdatamodeld in Sources */,
-				35C1A7831C5E1B82007C9F81 /* Reachability.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
